@@ -1,4 +1,4 @@
 * clone repo
-* cd into directory
+* cd into figma directory
 * npm install
 * npm run start
