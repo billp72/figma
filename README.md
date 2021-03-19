@@ -1,4 +1,4 @@
-** clone repo **
-** cd into directory **
-** npm install **
-** npm run start **
+* clone repo
+* cd into directory
+* npm install
+* npm run start
