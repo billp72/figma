@@ -1,4 +1,6 @@
 import * as React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCopy } from '@fortawesome/free-solid-svg-icons'
 //import styled from 'styled-components'
 
 /*const Container = styled.div`
@@ -40,6 +42,7 @@ const copy = {
 
 const App = () => {
  const itemsRef = React.useRef([]);
+ const btnRef = React.useRef([]);
  const [copySuccess, setCopySuccess] = React.useState('');
  const [promocode, setPromo] = React.useState('')
  const [indx, setIndex ] = React.useState(0)
@@ -68,6 +71,7 @@ const App = () => {
 
  React.useEffect(() => {
   itemsRef.current = itemsRef.current.slice(0, rows.length);//clone array
+  btnRef.current = btnRef.current.slice(0, rows.length);//clone array
  },[rows])
 
  const filter = (input) => {
@@ -100,6 +104,14 @@ const App = () => {
     ])
   }
 
+  const activate = (i) => {
+    if(btnRef.current[i].innerHTML === 'Activate bonus')
+      btnRef.current[i].innerHTML = 'Activated'
+    else{
+      btnRef.current[i].innerHTML = 'Activate bonus'
+    }
+  }
+
   const copyPromo = (i) => {
     const promo = !!itemsRef.current[i].value ? itemsRef.current[i].value : promocode;
     navigator.clipboard.writeText(promo)
@@ -111,14 +123,6 @@ const App = () => {
     setPromo(e.target.value)
   }
 
-  const activate = () => {
-    if(!!promocode)
-      alert(`Your promo code ${promocode} is activated`)
-    else
-      alert('Please type your promo code to activate it')
-
-    setPromo('')
-  }
 
   return (
    <React.Fragment>
@@ -143,12 +147,12 @@ const App = () => {
           </div>
           <div style={item}>
             <div>promocode</div>
-            <i onClick={() => copyPromo(index)} style={{color:'#0085ff', position: 'absolute', margin: '5px 0 0 160px'}} className="fa fa-user icon"></i>
+            <FontAwesomeIcon onClick={() => copyPromo(index)} style={{color:'#0085ff', position: 'absolute', margin: '9px 0 0 160px'}} icon={faCopy} />
             <input onChange={getPromocode} ref={el => itemsRef.current[index] = el}  value={row.code} style={{padding:7, border:'1px solid grey'}} type="text" />
             {index === indx ? copySuccess : ''}
           </div>
           <div style={button}>
-            <button style={{padding:7, width:200, backgroundColor:'#0085ff', color:'white', border:'1px solid grey'}} onClick={() => activate()}>Activate bonus</button>
+            <button ref={el => btnRef.current[index] = el} style={{padding:7, width:200, backgroundColor:'#0085ff', color:'white', border:'1px solid grey'}} onClick={() => activate(index)}>Activate bonus</button>
           </div>
         </div>
         )
