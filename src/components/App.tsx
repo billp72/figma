@@ -5,8 +5,10 @@ import * as React from "react";
   display:flex;
 `*/
 const container = {
-  backgroundColor:'#ededed',
-  padding:'1.5em'
+  backgroundColor:'#f5f7fa',
+  padding:'1.5em',
+  fontSize:'1.0em',
+  fontFamily: 'Montserrat, sans-serif'
 }
 
 const spacing = {
@@ -15,6 +17,10 @@ const spacing = {
 const item = {
   width:'200px',
   padding:'20px'
+}
+
+const first = {
+  marginRight:'5em'
 }
 
 const button = {
@@ -33,20 +39,36 @@ const copy = {
 }
 
 const App = () => {
-
+ const itemsRef = React.useRef([]);
  const [copySuccess, setCopySuccess] = React.useState('');
  const [promocode, setPromo] = React.useState('')
  const [indx, setIndex ] = React.useState(0)
  const [ rows, setRows ] = React.useState([
     {
       name:'Siteconstruction.io',
-      description:'description'
+      description:'description',
+      code:'12vvdf'
     },
     {
       name:'Appvision.com',
-      description:'description'
+      description:'description',
+      code:'45sfgs'
+    },
+    {
+      name:'Analytics.com',
+      description:'description',
+      code:'145gf'
+    },
+    {
+      name:'Logotype.com',
+      description:'description',
+      code:'145gfsdfr'
     }
   ])
+
+ React.useEffect(() => {
+  itemsRef.current = itemsRef.current.slice(0, rows.length);//clone array
+ },[rows])
 
  const filter = (input) => {
    let newarr = rows.filter((item) => item.name.toUpperCase().indexOf(input.toUpperCase()) > -1)
@@ -57,17 +79,30 @@ const App = () => {
     setRows([
       {
         name:'Siteconstruction.io',
-        description:'description'
+        description:'description',
+        code:'12vvdf'
       },
       {
         name:'Appvision.com',
-        description:'description'
+        description:'description',
+        code:'45sfgs'
+      },
+      {
+        name:'Analytics.com',
+        description:'description',
+        code:'145gf'
+      },
+      {
+        name:'Logotype.com',
+        description:'description',
+        code:'145gfsdfr'
       }
     ])
   }
 
   const copyPromo = (i) => {
-    navigator.clipboard.writeText(promocode)
+    const promo = !!itemsRef.current[i].value ? itemsRef.current[i].value : promocode;
+    navigator.clipboard.writeText(promo)
     setIndex(i)
     setCopySuccess('copied')
   }
@@ -89,8 +124,10 @@ const App = () => {
    <React.Fragment>
      <div style={container}> 
       <header style={spacing}>
-        <div>Services</div>
-        <input onChange={(e) => filter(e.target.value)} type="text" /><button onClick={reset}>reset</button>
+        <h1>Services</h1>
+        <div>filter</div>
+        <input style={{padding:7, border:'1px solid grey'}} onChange={(e) => filter(e.target.value)} type="text" />
+        <button style={{padding:7, marginLeft:5, width:100, border:'1px solid grey', backgroundColor:'#f5f7fa'}} onClick={reset}>reset</button>
       </header>
       {rows.map((row, index) => {
         return (
@@ -100,18 +137,18 @@ const App = () => {
             backgroundColor:'white',
             margin: '20px 0'
           }}>
-          <div style={item}>
+          <div style={Object.assign({}, item, first)}>
             <h3>{row.name}</h3>
             {row.description}
           </div>
           <div style={item}>
             <div>promocode</div>
-            <i onClick={() => copyPromo(index)} style={{position: 'absolute', marginLeft: '160px'}} className="fa fa-user icon"></i>
-            <input onChange={getPromocode} type="text" />
+            <i onClick={() => copyPromo(index)} style={{color:'#0085ff', position: 'absolute', margin: '5px 0 0 160px'}} className="fa fa-user icon"></i>
+            <input onChange={getPromocode} ref={el => itemsRef.current[index] = el}  value={row.code} style={{padding:7, border:'1px solid grey'}} type="text" />
             {index === indx ? copySuccess : ''}
           </div>
           <div style={button}>
-            <button onClick={() => activate()}>Activate</button>
+            <button style={{padding:7, width:200, backgroundColor:'#0085ff', color:'white', border:'1px solid grey'}} onClick={() => activate()}>Activate bonus</button>
           </div>
         </div>
         )
